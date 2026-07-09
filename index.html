@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
         :root {
-            /* متغیرهای تم پیش‌فرض (کلاسیک) */
             --board-bg: rgba(0,0,0,0.4);
             --cell-bg: rgba(255,255,255,0.05);
             --cell-hover: rgba(255,255,255,0.15);
@@ -258,17 +257,19 @@
     // ===================== رمزها و داده‌ها =====================
     const ADMIN_PASSWORD = "£££&&&bdhxhdhsjxhshznbxhdsjxhhdsjsjsjsj(hhebddv؛";
     const GIFT_PASSWORD = "nshdhdhdhdbxbzb£&*hejeixmaaaamkjjhg";
-    const DEFAULT_AVATAR = "images/avatar.png";
+    
+    // 🔥 تغییر مهم: حذف شد images/ از آدرس‌ها
+    const DEFAULT_AVATAR = "avatar.png";
     const RUBIKA_LINK = "https://rubika.ir/xai8bkhk";
 
     const shopData = {
         avatars: [
-            { id: 'av1', name: 'آیکون کاربر', price: 0, img: 'images/avatar.png' },
-            { id: 'av2', name: 'شیر', price: 400, img: 'images/lion.jpg' },
-            { id: 'av3', name: 'قلب', price: 1500, img: 'images/heart.jpg' },
-            { id: 'av4', name: 'تاج طلایی', price: 2050, img: 'images/crown.jpg' },
-            { id: 'av7', name: 'پژو پارس', price: 70, img: 'images/peugeot.jpg' },
-            { id: 'av8', name: 'مرد عنکبوتی', price: 90, img: 'images/spiderman.jpg' }
+            { id: 'av1', name: 'آیکون کاربر', price: 0, img: 'avatar.png' },
+            { id: 'av2', name: 'شیر', price: 400, img: 'lion.jpg' },
+            { id: 'av3', name: 'قلب', price: 1500, img: 'heart.jpg' },
+            { id: 'av4', name: 'تاج طلایی', price: 2050, img: 'crown.jpg' },
+            { id: 'av7', name: 'پژو پارس', price: 70, img: 'peugeot.jpg' },
+            { id: 'av8', name: 'مرد عنکبوتی', price: 90, img: 'spiderman.jpg' }
         ],
         frames: [
             { id: 'fr1', name: 'آتشین', price: 3000, img: '🔥' },
@@ -283,7 +284,6 @@
             { id: 'cr3', name: 'الماس', price: 400, img: '💎' },
             { id: 'cr4', name: 'ستاره', price: 300, img: '⭐' }
         ],
-        // بخش جدید تم‌ها (Themes)
         themes: [
             { id: 'th1', name: 'کلاسیک (پیش‌فرض)', price: 0, img: '⚫' },
             { id: 'th2', name: 'جنگل (سبز)', price: 1000, img: '🌿' },
@@ -305,7 +305,6 @@
         isPlayerTurn: true,
         hasClaimedGift: false,
         pendingGifts: [],
-        // ویژگی‌های جدید
         lastDailyClaim: null,
         winStreak: 0,
         hasClaimedStreakReward: false
@@ -453,7 +452,6 @@
         // وضعیت پاداش روزانه
         const today = new Date().toDateString();
         const lastClaim = state.lastDailyClaim ? new Date(state.lastDailyClaim).toDateString() : null;
-        const dailyBtn = document.querySelector('.btn-gold'); // دکمه پاداش روزانه
         if (lastClaim === today) {
             document.getElementById('dailyRewardStatus').innerText = '✅ پاداش امروز دریافت شد. فردا برگرد!';
         } else {
@@ -515,7 +513,6 @@
     function startGame(isRematch = false) {
         clearTimeout(botTimeout);
         
-        // هزینه ۱۰ سکه (چک کردن چه در حالت عادی و چه در ریمچ)
         if (state.coins < 10) {
             alert("برای شروع بازی به حداقل ۱۰ سکه نیاز دارید!");
             return;
@@ -533,7 +530,6 @@
         document.getElementById('mainScreen').classList.add('hidden');
         document.getElementById('gameScreen').classList.remove('hidden');
         document.getElementById('gameStatus').style.color = '#f1c40f';
-        // نمایش دکمه ریمچ اگر بازی تمام شد، مخفی است
         document.getElementById('btnRematch').classList.add('hidden');
 
         const userLabel = state.playerSign;
@@ -682,13 +678,11 @@
         const userSign = state.playerSign;
         const botSign = state.playerSign === 'X' ? 'O' : 'X';
 
-        // منطق استریک (بردهای پیاپی)
         if (winner === userSign) {
             state.winStreak++;
             msg = '🎉 شما برنده شدید! +۵۰ سکه';
             coinsChange = 50;
             
-            // بررسی جایزه ۳ برد پیاپی
             if (state.winStreak === 3 && !state.hasClaimedStreakReward) {
                 state.coins += 30;
                 state.hasClaimedStreakReward = true;
@@ -716,7 +710,6 @@
         document.getElementById('gameStatus').style.color = winner === userSign ? '#2ecc71' : winner === botSign ? '#e74c3c' : '#f1c40f';
         document.getElementById('streakDisplay').innerText = `🔥 بردهای پیاپی: ${state.winStreak}`;
 
-        // نمایش دکمه بازی مجدد و مخفی کردن دکمه بازگشت به منو (یا هر دو)
         document.getElementById('btnRematch').classList.remove('hidden');
     }
 
@@ -912,7 +905,7 @@
         }
         state.coins -= 10;
         
-        // جوایز چرخ شانس (با وزن‌های احتمالی)
+        // جوایز چرخ شانس
         const prizes = [
             { value: 0, weight: 20 },
             { value: 5, weight: 20 },
@@ -924,7 +917,6 @@
             { value: 100, weight: 2 }
         ];
         
-        // محاسبه وزن
         let totalWeight = prizes.reduce((sum, p) => sum + p.weight, 0);
         let random = Math.random() * totalWeight;
         let selectedPrize = prizes[0];
@@ -973,4 +965,4 @@
     });
 </script>
 </body>
-</html>
+    </html>
